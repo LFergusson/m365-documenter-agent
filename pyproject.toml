@@ -1,0 +1,18 @@
+[project]
+name = "browser-agent"
+version = "0.0.1"
+description = "This is an agent that will leverage a browser to research a company and prepare a competitor analysis report."
+authors = [
+    {name = "Your Name",email = "you@example.com"}
+]
+license = {text = "n"}
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "agent-framework (>=1.0.0b251007,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
