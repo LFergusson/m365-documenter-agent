@@ -13,5 +13,7 @@ poetry env use python3.12
 
 poetry config warnings.export false
 
-# Todo: Poetry Install.
+poetry config virtualenvs.in-project true
 
+# Todo: Poetry Install.
+poetry install
