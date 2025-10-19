@@ -187,6 +187,7 @@ resource cognitiveService 'Microsoft.CognitiveServices/accounts@2025-06-01' = {
     publicNetworkAccess: publicNetworkAccess
     networkAcls: networkAcls
     disableLocalAuth: enableLocalAuth
+    customSubDomainName: toLower(cognitiveServiceName)
   }
 }
 
