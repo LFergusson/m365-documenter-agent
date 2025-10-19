@@ -1,0 +1,26 @@
+{
+    // Python configuration
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}/src"
+    ],
+    "python.analysis.packageIndexDepths": [
+        {
+            "name": "",
+            "depth": 5,
+            "includeAllSymbols": true
+        }
+    ],
+    // Ensure Pylance uses the correct import resolution
+    "python.languageServer": "Pylance",
+    // Auto-activate virtual environment
+    "python.terminal.activateEnvironment": true,
+    // Format on save (optional)
+    "editor.formatOnSave": true,
+    "python.formatting.provider": "none",
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+        }
+    }
+}

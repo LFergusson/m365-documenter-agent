@@ -1,11 +1,12 @@
 """API Service - FastAPI Application"""
+
 from fastapi import FastAPI
 from shared.models import TestStatusResponse
 
 app = FastAPI(
     title="Browser Agent API",
     description="API service for browser automation and analysis",
-    version="0.1.0"
+    version="0.1.0",
 )
 
 

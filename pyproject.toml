@@ -11,10 +11,17 @@ dependencies = [
     "pytest (>=8.4.2,<9.0.0)"
 ]
 [tool.setuptools]
-package-dir = {"" = "code"}
+package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
-where = ["code"]
+where = ["src"]
+
+# Pylance/Pyright configuration
+[tool.pyright]
+include = ["src"]
+extraPaths = ["src"]
+pythonVersion = "3.12"
+typeCheckingMode = "basic"
 
 [build-system]
 requires = ["setuptools>=68.0.0", "wheel"]

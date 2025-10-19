@@ -6,7 +6,7 @@ WORKDIR /app
 COPY pyproject.toml ./
 
 # Copy all code (shared + this service)
-COPY code/ ./code/
+COPY src/ ./src/
 
 # Install dependencies
 RUN pip install --no-cache-dir -e .
