@@ -1,5 +1,5 @@
 [project]
-name = "browser-agent"
+name = "m365-documenter-agent"
 version = "0.1.0"
 description = "This is an agent that will leverage a browser to research a company and prepare a competitor analysis report."
 readme = "README.md"
