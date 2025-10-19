@@ -1,7 +1,7 @@
 [project]
 name = "m365-documenter-agent"
 version = "0.1.0"
-description = "This is an agent that will leverage a browser to research a company and prepare a competitor analysis report."
+description = "This is an agent that will document a Microsoft 365 Tenancy in As Built As Configured documentation"
 readme = "README.md"
 requires-python = ">=3.12,<3.14"
 dependencies = [

@@ -4,14 +4,12 @@
 
 This repository provides a series of Agents built on Agent-Framework to document a Microsoft 365 Tenancy in As Built As Configured documentation. It also allows for the development of Maester Tests.
 
-
-
 ## 🤖 Agents
 The agents in this include:
-[x] Graph Documenter
-[] Graph Retriever 
-[] Document Writer
-[] Maester Author
+- Graph Documenter
+- Graph Retriever 
+- Document Writer
+- Maester Author
 
 Each agent has a specific purpose and prompts that are used to 
 
