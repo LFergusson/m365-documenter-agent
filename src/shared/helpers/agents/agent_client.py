@@ -1,6 +1,4 @@
-import asyncio
-from abc import ABC
-from dataclasses import dataclass
+"""Agent Client to create a generic Agent."""
 
 from agent_framework.azure import (
     AzureOpenAIChatClient,
@@ -12,13 +10,22 @@ from shared.models.chatmodel import ChatModelConfig
 
 
 # Create a client to handle creating a generic Agent.
-class AgentClientBase(ABC):
+class AgentClient:
     """Abstract base class for agent clients."""
 
+    # The instructions that the agent will respond with.
     instruction: str
+
+    # The name of the agent.
     name: str
+
+    # Whether the agent should send content safety checks.
     use_content_safety: bool = True
+
+    # The Azure Open AI Chat Client.
     agent_client: AzureOpenAIChatClient
+
+    # The agent instance.
     agent: ChatAgent
 
     def __init__(
@@ -41,7 +48,6 @@ class AgentClientBase(ABC):
     # Function To create the Agent
     def create_agent(self):
         """Create the agent client."""
-        credential = DefaultAzureCredential()
         self.agent = ChatAgent(
             name=self.name,
             instruction=self.instruction,
@@ -53,6 +59,10 @@ class AgentClientBase(ABC):
         """Run the agent with the given user input."""
         if not self.agent:
             self.create_agent()
+
+        if self.use_content_safety:
+            # TODO: Implement content safety checks here
+            pass
 
         response = await self.agent.run(user_input)
         return response.text
