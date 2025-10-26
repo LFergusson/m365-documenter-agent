@@ -3,8 +3,8 @@
 import logging
 from fastapi import FastAPI
 from shared.models.chat_model import ChatModelConfig
-from shared.models.responses import TestStatusResponse
 from shared.helpers.agents import agent_client
+from shared.agents.graph_documenter import GraphDocumenterAgent
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -21,16 +21,27 @@ chat_config = ChatModelConfig(
 )
 
 
-@app.get("/status", response_model=TestStatusResponse)
+@app.get("/status")
 async def get_status():
     """Endpoint to get the status of the application."""
-    return TestStatusResponse()
+    return {"status": "running", "service": "api"}
 
 
 @app.get("/health")
 async def health_check():
     """Health check endpoint for container orchestration."""
     return {"status": "healthy", "service": "api"}
+
+
+@app.post("/generate-documentation")
+async def generate_documentation(user_input: str):
+    """Endpoint to generate documentation."""
+    logger.warning("Received request to generate documentation.")
+    # Call the agent's documentation generation method here
+    agent = GraphDocumenterAgent()
+    await agent.run(user_input)
+
+    return {"response": "Documentation generated successfully."}
 
 
 @app.post("/run-agent")

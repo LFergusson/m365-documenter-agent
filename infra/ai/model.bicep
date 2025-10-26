@@ -12,12 +12,13 @@ param resourceName string = deploymentName
 @description('The model to deploy. For example: "gpt-4", "gpt-4o", "gpt-4o-mini", "gpt-35-turbo", "gpt-35-turbo-16k", "gpt-35-turbo-0613", "gpt-35-turbo-16k-0613", "text-davinci-003", "text-davinci-002", "code-davinci-002", "text-curie-001", "text-babbage-001", "text-ada-001". See https://learn.microsoft.com/en-us/azure/cognitive-services/openai/concepts/models for the full list of available models.')
 param model string = 'gpt-4'
 
-@allowed(
-  [
-    'Standard'
-    'GlobalStandard'
-  ]
-)
+@description('The capacity for this model (* 1k TPM).')
+param capacity int = 25
+
+@allowed([
+  'Standard'
+  'GlobalStandard'
+])
 param modelSku string = 'Standard'
 
 param modelVersion string = '1.0'
@@ -40,6 +41,6 @@ resource modelDeployment 'Microsoft.CognitiveServices/accounts/deployments@2025-
   }
   sku: {
     name: modelSku
-    capacity: 1
+    capacity: capacity
   }
 }

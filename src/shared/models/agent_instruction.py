@@ -4,11 +4,11 @@ from abc import ABC
 class AgentInstruction(ABC):
     """Base class to handle and construct agent instructions."""
 
-    def __init__(self, base_instruction: str):
-        self.base_instruction = base_instruction
+    def __init__(self, system_instruction: str):
+        self.system_instruction = system_instruction
 
     def __str__(self):
-        return self.base_instruction
+        return self.system_instruction
 
 
 class AgentFewShotInstruction(AgentInstruction):
@@ -28,13 +28,13 @@ class AgentFewShotInstruction(AgentInstruction):
     ... etc.
     """
 
-    def __init__(self, base_instruction: str, examples: list[tuple[str, str]]):
-        super().__init__(base_instruction)
+    def __init__(self, system_instruction: str, examples: list[tuple[str, str]]):
+        super().__init__(system_instruction)
+        # self.system_instruction = system_instruction
         self.examples = examples
 
     def __str__(self):
-
-        out = self.base_instruction
+        out = self.system_instruction
         out += "\n\nExamples:\n"
         out += "\n\n".join(
             f"Input: {input}\nOutput: {output}" for input, output in self.examples

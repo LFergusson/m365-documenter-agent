@@ -1,170 +1,181 @@
-from shared.helpers.agents.agent_client import AgentClient
-import shared.models.chat_model as cm
+"""Agent client for generating documentation for graph api responses."""
+
+from shared.helpers.agents.agent_client import BaseAgent
+from shared.models.chat_model import ChatModelConfig
 from shared.models.agent_instruction import AgentFewShotInstruction
-from agent_framework.azure import AzureOpenAIChatClient
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
-class GraphDocumenterAgent:
+class GraphDocumenterAgent(BaseAgent):
     """Agent client for generating documentation for graph schemas."""
 
-    def __init__(
-        self,
-    ):
-        # Set up few-shot examples
-        example1 = (
-            """
-            {
-                "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#identity/conditionalAccess/policies/$entity",
-                "@microsoft.graph.tips": "Use $select to choose only the properties your app needs, as this can lead to performance improvements. For example: GET identity/conditionalAccess/policies('<guid>')?$select=conditions,createdDateTime",
-                "id": "973d7179-c85e-4648-b8cf-32f8a18f0502",
-                "templateId": null,
-                "displayName": "BLOCK - High Risk Sign-Ins",
-                "createdDateTime": "2023-07-16T04:53:13.0783289Z",
-                "modifiedDateTime": "2023-08-06T10:36:25.7936777Z",
-                "state": "enabledForReportingButNotEnforced",
-                "sessionControls": null,
-                "conditions": {
-                    "userRiskLevels": [],
-                    "signInRiskLevels": [
-                        "high"
-                    ],
-                    "clientAppTypes": [
-                        "all"
-                    ],
-                    "servicePrincipalRiskLevels": [],
-                    "insiderRiskLevels": null,
-                    "locations": null,
-                    "devices": null,
-                    "clientApplications": null,
-                    "authenticationFlows": null,
-                    "applications": {
-                        "includeApplications": [
-                            "All"
-                        ],
-                        "excludeApplications": [],
-                        "includeUserActions": [],
-                        "includeAuthenticationContextClassReferences": [],
-                        "applicationFilter": null
-                    },
-                    "users": {
-                        "includeUsers": [
-                            "All"
-                        ],
-                        "excludeUsers": [],
-                        "includeGroups": [],
-                        "excludeGroups": [
-                            "a68ee561-2427-4058-b307-7e2f7b8f6c07"
-                        ],
-                        "includeRoles": [],
-                        "excludeRoles": [],
-                        "includeGuestsOrExternalUsers": null,
-                        "excludeGuestsOrExternalUsers": null
-                    },
-                    "platforms": {
-                        "includePlatforms": [
-                            "all"
-                        ],
-                        "excludePlatforms": [
-                            "iOS"
-                        ]
-                    }
-                },
-                "grantControls": {
-                    "operator": "OR",
-                    "builtInControls": [
-                        "block"
-                    ],
-                    "customAuthenticationFactors": [],
-                    "termsOfUse": [],
-                    "authenticationStrength@odata.context": "https://graph.microsoft.com/v1.0/$metadata#identity/conditionalAccess/policies('973d7179-c85e-4648-b8cf-32f8a18f0502')/grantControls/authenticationStrength/$entity",
-                    "authenticationStrength": null
-                }
-            }
-            """,
-            """
-            # Conditional Access Policy Configuration
+    example_1 = (
+        """
+{
+    "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#identity/conditionalAccess/policies/$entity",
+    "@microsoft.graph.tips": "Use $select to choose only the properties your app needs, as this can lead to performance improvements. For example: GET identity/conditionalAccess/policies('<guid>')?$select=conditions,createdDateTime",
+    "id": "973d7179-c85e-4648-b8cf-32f8a18f0502",
+    "templateId": null,
+    "displayName": "BLOCK - High Risk Sign-Ins",
+    "createdDateTime": "2023-07-16T04:53:13.0783289Z",
+    "modifiedDateTime": "2023-08-06T10:36:25.7936777Z",
+    "state": "enabledForReportingButNotEnforced",
+    "sessionControls": null,
+    "conditions": {
+        "userRiskLevels": [],
+        "signInRiskLevels": [
+            "high"
+        ],
+        "clientAppTypes": [
+            "all"
+        ],
+        "servicePrincipalRiskLevels": [],
+        "insiderRiskLevels": null,
+        "locations": null,
+        "devices": null,
+        "clientApplications": null,
+        "authenticationFlows": null,
+        "applications": {
+            "includeApplications": [
+                "All"
+            ],
+            "excludeApplications": [],
+            "includeUserActions": [],
+            "includeAuthenticationContextClassReferences": [],
+            "applicationFilter": null
+        },
+        "users": {
+            "includeUsers": [
+                "All"
+            ],
+            "excludeUsers": [],
+            "includeGroups": [],
+            "excludeGroups": [
+                "a68ee561-2427-4058-b307-7e2f7b8f6c07"
+            ],
+            "includeRoles": [],
+            "excludeRoles": [],
+            "includeGuestsOrExternalUsers": null,
+            "excludeGuestsOrExternalUsers": null
+        },
+        "platforms": {
+            "includePlatforms": [
+                "all"
+            ],
+            "excludePlatforms": [
+                "iOS"
+            ]
+        }
+    },
+    "grantControls": {
+        "operator": "OR",
+        "builtInControls": [
+            "block"
+        ],
+        "customAuthenticationFactors": [],
+        "termsOfUse": [],
+        "authenticationStrength@odata.context": "https://graph.microsoft.com/v1.0/$metadata#identity/conditionalAccess/policies('973d7179-c85e-4648-b8cf-32f8a18f0502')/grantControls/authenticationStrength/$entity",
+        "authenticationStrength": null
+    }
+}
+        """,
+        """
+    # Conditional Access Policy Configuration
 
-            ## BLOCK - High Risk Sign-Ins - 
-            **Policy ID:** 973d7179-c85e-4648-b8cf-32f8a18f0502  
-            **State:** Enabled for Reporting But Not Enforced  
-            **Created:** July 16, 2023  
-            **Last Modified:** August 6, 2023s.
+    ## BLOCK - High Risk Sign-Ins - 
+    **Policy ID:** 973d7179-c85e-4648-b8cf-32f8a18f0502  
+    **State:** Enabled for Reporting But Not Enforced  
+    **Created:** July 16, 2023  
+    **Last Modified:** August 6, 2023s.
 
-            *This policy blocks all high-risk sign-ins across all applications and platforms except iOS.*
+    *This policy blocks all high-risk sign-ins across all applications and platforms except iOS.*
 
-            ### Conditions
-            The following values dictate which sign ins match this policy.
-            #### User Conditions
-            | Configuration Item | Value |
-            | ---- | ---- |
-            | Include Users | All |
-            | Exclude Users | Not Configured |
-            | Include Groups | Not Configured |
-            | Exclude Groups | a68ee561-2427-4058-b307-7e2f7b8f6c07 |
-            | Include Roles | Not Configured |
-            | Exclude Roles | Not Configured |
-            | Include Guests or External Users | Not Configured |
-            | Exclude Guest or External Users | Not Configured |
+    ### Conditions
+    The following values dictate which sign ins match this policy.
+    #### User Conditions
+    | Configuration Item | Value |
+    | ---- | ---- |
+    | Include Users | All |
+    | Exclude Users | Not Configured |
+    | Include Groups | Not Configured |
+    | Exclude Groups | a68ee561-2427-4058-b307-7e2f7b8f6c07 |
+    | Include Roles | Not Configured |
+    | Exclude Roles | Not Configured |
+    | Include Guests or External Users | Not Configured |
+    | Exclude Guest or External Users | Not Configured |
 
-            #### Risk Based Conditions
-            | Configuration Item | Value |
-            | ---- | ---- |
-            | User Risk Level | Not Configured |
-            | Sign In Risk Level | High |
-            | Service Principal Risk Levels | Not Configured |
-            | Insider Risk Levels | Not Configured |
+    #### Risk Based Conditions
+    | Configuration Item | Value |
+    | ---- | ---- |
+    | User Risk Level | Not Configured |
+    | Sign In Risk Level | High |
+    | Service Principal Risk Levels | Not Configured |
+    | Insider Risk Levels | Not Configured |
 
-            #### Location Conditions
-            | Configuration Item | Value |
-            | ---- | ---- |
-            | Locations | Not Configured |
+    #### Location Conditions
+    | Configuration Item | Value |
+    | ---- | ---- |
+    | Locations | Not Configured |
 
-            #### Device and Platform Conditions
-            | Configuration Item | Value |
-            | ---- | ---- |
-            | Devices | Not Configured |
-            | Include Platforms | All |
-            | Exclude Platforms | iOS |
+    #### Device and Platform Conditions
+    | Configuration Item | Value |
+    | ---- | ---- |
+    | Devices | Not Configured |
+    | Include Platforms | All |
+    | Exclude Platforms | iOS |
 
-            #### Authentication Conditions
-            | Configuration Item | Value |
-            | ---- | ---- |
-            | Authentication Flows | Not Configured |
-            | Client Applications | Not Configured |
-            | Client App Types | All |
+    #### Authentication Conditions
+    | Configuration Item | Value |
+    | ---- | ---- |
+    | Authentication Flows | Not Configured |
+    | Client Applications | Not Configured |
+    | Client App Types | All |
 
-            #### Target Application Conditions 
-            | Configuration Item | Value |
-            | ---- | ---- |
-            | Include Applications | All |
-            | Exclude Applications | Not Configured |
-            | Include User Actions | Not Configured |
-            | Include Authentication Context Class References | Not Configured |
-            | Application Filters | Not Configured |
+    #### Target Application Conditions 
+    | Configuration Item | Value |
+    | ---- | ---- |
+    | Include Applications | All |
+    | Exclude Applications | Not Configured |
+    | Include User Actions | Not Configured |
+    | Include Authentication Context Class References | Not Configured |
+    | Application Filters | Not Configured |
 
-            ### Controls
-            The following values dictate what controls get applied to a matching sign in.
-            #### Grant Controls
-            | Configuration Item | Value |
-            | ---- | ---- |
-            | Operator | Or |
-            | Built in Controls | Block |
-            | Custom Authentication Factors | Not Configured |
-            | Terms of Use | Not Configured |
-            | Authentication Strength | Not Configured |
-            #### Session Controls
-            Not Configured
-            """,
-        )
+    ### Controls
+    The following values dictate what controls get applied to a matching sign in.
+    #### Grant Controls
+    | Configuration Item | Value |
+    | ---- | ---- |
+    | Operator | Or |
+    | Built in Controls | Block |
+    | Custom Authentication Factors | Not Configured |
+    | Terms of Use | Not Configured |
+    | Authentication Strength | Not Configured |
+    #### Session Controls
+    Not Configured
+        """,
+    )
 
-        instruction = AgentFewShotInstruction(
-            base_instruction="Generate documentation for the provided Microsoft Graph API JSON Schema.",
-            examples=[example1],
-        )
+    few_shot_example = AgentFewShotInstruction(
+        system_instruction="You are an expert technical writer specializing in Microsoft Graph API documentation. Your task is to generate clear, concise, and well-structured documentation based on raw JSON responses from the Microsoft Graph API. The documentation should be suitable for inclusion in official Microsoft documentation or technical blogs.",
+        examples=[example_1],
+    )
 
-        self.agent_client = AgentClient(
-            instruction=instruction,
+    def __init__(self):
+        super().__init__(
+            instructions=self.few_shot_example,
             name="GraphDocumenterAgent",
-            chat_completion_model=cm(),
+            chat_completion_model=ChatModelConfig(
+                endpoint="https://aoai-browseragentwg3jl-dev.openai.azure.com/",
+                deployment_name="gpt-4o",
+            ),
             use_content_safety=False,
         )
+
+    def _setup_agent(self):
+        """Set up Graph Documenter Agent specific configuration."""
+        logger.info("Setting up Graph Documenter Agent configuration.")
+        # Additional setup can be done here if needed.
+        pass

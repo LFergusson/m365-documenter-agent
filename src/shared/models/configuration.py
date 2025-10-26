@@ -12,18 +12,18 @@ class AppConfig:
     chat_model_config: ChatModelConfig
 
     advanced_model_config: ChatModelConfig = ChatModelConfig(
-        endpoint="https://advanced-openai-endpoint/",
-        deployment_name="advanced-deployment",
+        endpoint="https://aoai-browseragentwg3jl-dev.openai.azure.com/",
+        deployment_name="gpt-4o",
     )
 
     mini_model_config: ChatModelConfig = ChatModelConfig(
-        endpoint="https://mini-openai-endpoint/",
-        deployment_name="mini-deployment",
+        endpoint="https://aoai-browseragentwg3jl-dev.openai.azure.com/",
+        deployment_name="gpt-5-mini",
     )
 
     standard_model_config: ChatModelConfig = ChatModelConfig(
-        endpoint="https://standard-openai-endpoint/",
-        deployment_name="standard-deployment",
+        endpoint="https://aoai-browseragentwg3jl-dev.openai.azure.com/",
+        deployment_name="gpt-4o",
     )
 
     use_content_safety: bool = False
