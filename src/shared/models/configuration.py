@@ -1,7 +1,7 @@
 """Configuration for the applications."""
 
 from dataclasses import dataclass
-from src.shared.models.chatmodel import ChatModelType, ChatModelConfig
+from shared.models.chat_model import ChatModelType, ChatModelConfig
 
 
 @dataclass

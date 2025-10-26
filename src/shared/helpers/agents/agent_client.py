@@ -6,7 +6,8 @@ from agent_framework.azure import (
 from agent_framework import ChatAgent
 from azure.identity import DefaultAzureCredential
 
-from shared.models.chatmodel import ChatModelConfig
+from shared.models.chat_model import ChatModelConfig
+from shared.models.agent_instruction import AgentInstruction
 
 
 # Create a client to handle creating a generic Agent.
@@ -14,7 +15,7 @@ class AgentClient:
     """Abstract base class for agent clients."""
 
     # The instructions that the agent will respond with.
-    instruction: str
+    instruction: AgentInstruction
 
     # The name of the agent.
     name: str
@@ -30,7 +31,7 @@ class AgentClient:
 
     def __init__(
         self,
-        instruction: str,
+        instruction: AgentInstruction,
         name: str,
         chat_completion_model: ChatModelConfig,
         use_content_safety: bool = True,
@@ -50,7 +51,7 @@ class AgentClient:
         """Create the agent client."""
         self.agent = ChatAgent(
             name=self.name,
-            instruction=self.instruction,
+            instruction=str(self.instruction),
             chat_client=self.agent_client,
             use_content_safety=self.use_content_safety,
         )

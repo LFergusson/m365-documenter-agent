@@ -2,7 +2,7 @@
 
 import logging
 from fastapi import FastAPI
-from shared.models.chatmodel import ChatModelConfig
+from shared.models.chat_model import ChatModelConfig
 from shared.models.responses import TestStatusResponse
 from shared.helpers.agents import agent_client
 
