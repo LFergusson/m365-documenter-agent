@@ -17,6 +17,19 @@
                 "--reload"
             ],
             "jinja": true
+        },
+        {
+            "name": "Lokka MCP Server",
+            "type": "node-terminal",
+            "command": "npx -y @merill/lokka",
+            "request": "launch"
+        },
+        {
+            "name": "dev-ui",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "services.devui.app",
+            "console": "integratedTerminal"
         }
     ]
 }
