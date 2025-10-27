@@ -3,9 +3,9 @@
 from agent_framework.azure import (
     AzureOpenAIChatClient,
 )  # pylint: disable=no-name-in-module
-from agent_framework import ChatAgent
+from agent_framework import ChatAgent, AgentRunResponse, ToolProtocol
 from azure.identity import DefaultAzureCredential
-from abc import ABC
+from abc import ABC, abstractmethod
 
 from shared.models.chat_model import ChatModelConfig
 from shared.models.agent_instruction import AgentInstruction
@@ -21,6 +21,7 @@ class BaseAgent(ABC):
         name: str,
         chat_completion_model: ChatModelConfig,
         use_content_safety: bool = True,
+        tools: list[ToolProtocol] = [],
     ):
         # Initialize the agent client variables.
         self.instructions = instructions
@@ -34,12 +35,15 @@ class BaseAgent(ABC):
             credential=DefaultAzureCredential(),
         )
 
+        self.tools = tools
+        self._setup_agent()
         self._create_agent()
 
     def __repr__(self):
         return f"BaseAgent(name={self.name}, instructions={self.instructions})"
 
     # Function To create the Agent
+    @abstractmethod
     def _setup_agent(self):
         """Set up Agent Specific configuration."""
         pass

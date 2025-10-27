@@ -1,10 +1,14 @@
 """Agent client for generating documentation for graph api responses."""
 
+import logging
+import os
+from agent_framework import MCPStdioTool
 from shared.helpers.agents.agent_client import BaseAgent
 from shared.models.chat_model import ChatModelConfig
 from shared.models.agent_instruction import AgentFewShotInstruction
-import logging
 
+
+# Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -159,11 +163,16 @@ class GraphDocumenterAgent(BaseAgent):
     )
 
     few_shot_example = AgentFewShotInstruction(
-        system_instruction="You are an expert technical writer specializing in Microsoft Graph API documentation. Your task is to generate clear, concise, and well-structured documentation based on raw JSON responses from the Microsoft Graph API. The documentation should be suitable for inclusion in official Microsoft documentation or technical blogs.",
+        system_instruction="""
+You are an expert technical writer specializing in Microsoft Graph API documentation. Your task is to generate clear, concise, and well-structured documentation based on raw JSON responses from the Microsoft Graph API. The documentation should be suitable for inclusion in official Microsoft documentation or technical blogs.
+Given a JSON response, extract the relevant configuration details and present them in a human-readable format. Use markdown syntax to create headings, subheadings, and tables where appropriate. Ensure that the documentation accurately reflects the settings and configurations represented in the JSON.
+If there are any GUIDs or Ids present in the JSON, use your tools to look up their friendly names and include those in the documentation for better clarity.
+        """,
         examples=[example_1],
     )
 
     def __init__(self):
+        logger.info("Initializing Graph Documenter Agent.")
         super().__init__(
             instructions=self.few_shot_example,
             name="GraphDocumenterAgent",
@@ -178,4 +187,24 @@ class GraphDocumenterAgent(BaseAgent):
         """Set up Graph Documenter Agent specific configuration."""
         logger.info("Setting up Graph Documenter Agent configuration.")
         # Additional setup can be done here if needed.
-        pass
+
+        # Create the Lokka MCP tool and add it to the agent's tools.
+        lokka_mcp = MCPStdioTool(
+            name="lokka_mcp",
+            command="npx",
+            args=["-y", "@merill/lokka"],
+            description="Lokka is used to query a Microsoft 365 Tenant via the Microsoft Graph API. This can be used to gather up to date information about the current state of the tenant.",
+            env={
+                "TENNANT_ID": self.get_env_var("LOKKA_TENANT_ID"),
+                "CLIENT_ID": self.get_env_var("LOKKA_APPLICATION_ID"),
+                "CLIENT_SECRET": self.get_env_var("LOKKA_APPLICATION_SECRET"),
+            },
+        )
+        self.tools.append(lokka_mcp)
+
+    def get_env_var(self, var_name: str) -> str:
+        """Retrieve environment variable value."""
+        value = os.getenv(var_name)
+        if value is None:
+            logger.warning(f"Environment variable {var_name} is not set.")
+        return value or ""
