@@ -1802,6 +1802,120 @@ pyjwt = ">=2.10.1"
 python-dotenv = ">=1.1.1"
 
 [[package]]
+name = "microsoft-kiota-abstractions"
+version = "1.9.7"
+description = "Core abstractions for kiota generated libraries in Python"
+optional = false
+python-versions = "<4.0,>=3.9"
+groups = ["main"]
+files = [
+    {file = "microsoft_kiota_abstractions-1.9.7-py3-none-any.whl", hash = "sha256:8add66c38d05ab9a496c1c843bb16e04b70edc4651dc290b9629b14009f5c0c0"},
+    {file = "microsoft_kiota_abstractions-1.9.7.tar.gz", hash = "sha256:731ed60c2df74ca80d1bf36d40a4c390aab353db3a76796c63ea9e9a220ce65c"},
+]
+
+[package.dependencies]
+opentelemetry-api = ">=1.27.0"
+opentelemetry-sdk = ">=1.27.0"
+std-uritemplate = ">=2.0.0"
+
+[[package]]
+name = "microsoft-kiota-authentication-azure"
+version = "1.9.7"
+description = "Core abstractions for kiota generated libraries in Python"
+optional = false
+python-versions = "<4.0,>=3.9"
+groups = ["main"]
+files = [
+    {file = "microsoft_kiota_authentication_azure-1.9.7-py3-none-any.whl", hash = "sha256:a2d776bef22d10be65df1ea9e8f1737e46981bd14cdb70e3fe4f4a066e92b139"},
+    {file = "microsoft_kiota_authentication_azure-1.9.7.tar.gz", hash = "sha256:1ecef94097ca8029e5b903bfef8dbbf47ba75bc1521907164a84b6617226696b"},
+]
+
+[package.dependencies]
+aiohttp = ">=3.8.0"
+azure-core = ">=1.21.1"
+microsoft-kiota-abstractions = ">=1.9.7,<1.10.0"
+opentelemetry-api = ">=1.27.0"
+opentelemetry-sdk = ">=1.27.0"
+
+[[package]]
+name = "microsoft-kiota-http"
+version = "1.9.7"
+description = "Core abstractions for kiota generated libraries in Python"
+optional = false
+python-versions = "<4.0,>=3.9"
+groups = ["main"]
+files = [
+    {file = "microsoft_kiota_http-1.9.7-py3-none-any.whl", hash = "sha256:14ce6b14c4fa93608f535f2c6ae21d35b1d0e2635ab70501fa3a3afc90135261"},
+    {file = "microsoft_kiota_http-1.9.7.tar.gz", hash = "sha256:abcacca784649308ab93d8578c2afb581a42deed048b183d7bbdc48c325dd6a1"},
+]
+
+[package.dependencies]
+httpx = {version = ">=0.25,<1.0.0", extras = ["http2"]}
+microsoft-kiota-abstractions = ">=1.9.7,<1.10.0"
+opentelemetry-api = ">=1.27.0"
+opentelemetry-sdk = ">=1.27.0"
+
+[[package]]
+name = "microsoft-kiota-serialization-form"
+version = "1.9.7"
+description = "Core abstractions for kiota generated libraries in Python"
+optional = false
+python-versions = "<4.0,>=3.9"
+groups = ["main"]
+files = [
+    {file = "microsoft_kiota_serialization_form-1.9.7-py3-none-any.whl", hash = "sha256:72d2dc5e57a993145702870ad89c85cebe3336d4d34f231d951ee1bc83ad11b9"},
+    {file = "microsoft_kiota_serialization_form-1.9.7.tar.gz", hash = "sha256:d3297a60778c0437513334b703225ce108fd109f13c1993afea599b85dc5a528"},
+]
+
+[package.dependencies]
+microsoft-kiota-abstractions = ">=1.9.7,<1.10.0"
+
+[[package]]
+name = "microsoft-kiota-serialization-json"
+version = "1.9.7"
+description = "Core abstractions for kiota generated libraries in Python"
+optional = false
+python-versions = "<4.0,>=3.9"
+groups = ["main"]
+files = [
+    {file = "microsoft_kiota_serialization_json-1.9.7-py3-none-any.whl", hash = "sha256:6f44012f00cf7c4c4d8b9195e7f8a691d186021b5d9a20e791a77c800b5be531"},
+    {file = "microsoft_kiota_serialization_json-1.9.7.tar.gz", hash = "sha256:1e54ff90b185fe21cca94ebbf8468bf44a2ca5f082c4cf04dbd2d42a9472837a"},
+]
+
+[package.dependencies]
+microsoft-kiota-abstractions = ">=1.9.7,<1.10.0"
+
+[[package]]
+name = "microsoft-kiota-serialization-multipart"
+version = "1.9.7"
+description = "Core abstractions for kiota generated libraries in Python"
+optional = false
+python-versions = "<4.0,>=3.9"
+groups = ["main"]
+files = [
+    {file = "microsoft_kiota_serialization_multipart-1.9.7-py3-none-any.whl", hash = "sha256:cd72ee004039ee64a35bd5254afd3f8bc89877e948282ab0fe0a7efab75f68bb"},
+    {file = "microsoft_kiota_serialization_multipart-1.9.7.tar.gz", hash = "sha256:1a13d193d078dea86711d8c6e89ac142aff5033079c7be4061279b2da5c83ef8"},
+]
+
+[package.dependencies]
+microsoft-kiota-abstractions = ">=1.9.7,<1.10.0"
+
+[[package]]
+name = "microsoft-kiota-serialization-text"
+version = "1.9.7"
+description = "Core abstractions for kiota generated libraries in Python"
+optional = false
+python-versions = "<4.0,>=3.9"
+groups = ["main"]
+files = [
+    {file = "microsoft_kiota_serialization_text-1.9.7-py3-none-any.whl", hash = "sha256:47c4d774883bec269a6eb077a5ca2f26ae6715986c8defa374d536a9664dc43e"},
+    {file = "microsoft_kiota_serialization_text-1.9.7.tar.gz", hash = "sha256:d57a082d5c6ea1e650286314cac9a9e7a2662aa4beb80635bf4addd33d252bd5"},
+]
+
+[package.dependencies]
+microsoft-kiota-abstractions = ">=1.9.7,<1.10.0"
+
+[[package]]
 name = "ml-dtypes"
 version = "0.5.3"
 description = "ml_dtypes is a stand-alone implementation of several NumPy dtype extensions used in machine learning."
@@ -1892,6 +2006,50 @@ msal = ">=1.29,<2"
 
 [package.extras]
 portalocker = ["portalocker (>=1.4,<4)"]
+
+[[package]]
+name = "msgraph-core"
+version = "1.3.8"
+description = "Core component of the Microsoft Graph Python SDK"
+optional = false
+python-versions = ">=3.9"
+groups = ["main"]
+files = [
+    {file = "msgraph_core-1.3.8-py3-none-any.whl", hash = "sha256:86d83edcf62119946f201d13b7e857c947ef67addb088883940197081de85bea"},
+    {file = "msgraph_core-1.3.8.tar.gz", hash = "sha256:6e883f9d4c4ad57501234749e07b010478c1a5f19550ef4cf005bbcac4a63ae7"},
+]
+
+[package.dependencies]
+httpx = {version = ">=0.23.0", extras = ["http2"]}
+microsoft-kiota-abstractions = ">=1.8.0,<2.0.0"
+microsoft-kiota-authentication-azure = ">=1.8.0,<2.0.0"
+microsoft-kiota-http = ">=1.8.0,<2.0.0"
+
+[package.extras]
+dev = ["bumpver", "isort", "mypy", "pylint", "pytest", "yapf"]
+
+[[package]]
+name = "msgraph-sdk"
+version = "1.47.0"
+description = "The Microsoft Graph Python SDK"
+optional = false
+python-versions = ">=3.9"
+groups = ["main"]
+files = [
+    {file = "msgraph_sdk-1.47.0-py3-none-any.whl", hash = "sha256:887d637125144dc4fb14fb04b1f1293d21a3b1eaa9079a608512aa639ea51c5c"},
+    {file = "msgraph_sdk-1.47.0.tar.gz", hash = "sha256:73fa3d51eb6e7a78d233b956cec72ee22beb63b9b88ef041792661c50d9a30e7"},
+]
+
+[package.dependencies]
+azure-identity = ">=1.12.0"
+microsoft-kiota-serialization-form = ">=1.8.0,<2.0.0"
+microsoft-kiota-serialization-json = ">=1.8.0,<2.0.0"
+microsoft-kiota-serialization-multipart = ">=1.8.0,<2.0.0"
+microsoft-kiota-serialization-text = ">=1.8.0,<2.0.0"
+msgraph_core = ">=1.3.1"
+
+[package.extras]
+dev = ["bumpver", "isort", "mypy", "pylint", "pytest", "yapf"]
 
 [[package]]
 name = "msrest"
@@ -3775,6 +3933,18 @@ typing-extensions = {version = ">=4.10.0", markers = "python_version < \"3.13\""
 full = ["httpx (>=0.27.0,<0.29.0)", "itsdangerous", "jinja2", "python-multipart (>=0.0.18)", "pyyaml"]
 
 [[package]]
+name = "std-uritemplate"
+version = "2.0.8"
+description = "std-uritemplate implementation for Python"
+optional = false
+python-versions = "<4.0,>=3.8"
+groups = ["main"]
+files = [
+    {file = "std_uritemplate-2.0.8-py3-none-any.whl", hash = "sha256:839807a7f9d07f0bad1a88977c3428bd97b9ff0d229412a0bf36123d8c724257"},
+    {file = "std_uritemplate-2.0.8.tar.gz", hash = "sha256:138ceff2c5bfef18a650372a5e8c82fe7f780c87235513de6c342fb5f7e18347"},
+]
+
+[[package]]
 name = "tenacity"
 version = "9.1.2"
 description = "Retry code until it succeeds"
@@ -4393,4 +4563,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<3.14"
-content-hash = "dad5ab4672d59c00874ce2e52e2a741117fc7e0889fe420463d83cc88b3bf72b"
+content-hash = "e13be5e6caac19117c90f011e8d43192a2e275dd6758545ba4ce1a09defd65a8"
