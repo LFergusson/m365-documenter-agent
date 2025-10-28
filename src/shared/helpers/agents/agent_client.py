@@ -21,7 +21,7 @@ class BaseAgent(ABC):
         name: str,
         chat_completion_model: ChatModelConfig,
         use_content_safety: bool = True,
-        tools: list[ToolProtocol] = [],
+        tools: list = [],
     ):
         # Initialize the agent client variables.
         self.instructions = instructions
@@ -55,6 +55,7 @@ class BaseAgent(ABC):
             chat_client=self.agent_client,
             instructions=str(self.instructions),
             name=self.name,
+            tools=self.tools,
         )
 
     async def run(self, user_input: str) -> str:

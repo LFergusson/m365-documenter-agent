@@ -2,7 +2,9 @@
 
 import logging
 import os
-from agent_framework import MCPStdioTool
+from typing import Annotated
+from pydantic import Field
+from agent_framework import MCPStdioTool, ai_function
 from shared.helpers.agents.agent_client import BaseAgent
 from shared.models.chat_model import ChatModelConfig
 from shared.models.agent_instruction import AgentFewShotInstruction
@@ -183,24 +185,30 @@ If there are any GUIDs or Ids present in the JSON, use your tools to look up the
             use_content_safety=False,
         )
 
+    @ai_function(
+        name="Get_Group_Display_Name",
+        description="Retrieve the display name of an Entra group given its ID.",
+    )
+    def get_group_display_name(
+        self,
+        group_id: Annotated[
+            str, Field(description="The unique identifier of the Entra group.")
+        ],
+    ) -> str:
+        """Function to get the display name of an Entra group by its ID using Lokka."""
+        # This is a placeholder implementation. The actual implementation would
+        # involve invoking the Lokka tool to query the Microsoft Graph API.
+        if group_id == "a68ee561-2427-4058-b307-7e2f7b8f6c07":
+            return f"The name of {group_id} is Break Glass Group - Test"
+
+        return "Error: Group Not Found"  # Replace with actual logic to get group name
+
     def _setup_agent(self):
         """Set up Graph Documenter Agent specific configuration."""
         logger.info("Setting up Graph Documenter Agent configuration.")
         # Additional setup can be done here if needed.
 
-        # Create the Lokka MCP tool and add it to the agent's tools.
-        lokka_mcp = MCPStdioTool(
-            name="lokka_mcp",
-            command="npx",
-            args=["-y", "@merill/lokka"],
-            description="Lokka is used to query a Microsoft 365 Tenant via the Microsoft Graph API. This can be used to gather up to date information about the current state of the tenant.",
-            env={
-                "TENNANT_ID": self.get_env_var("LOKKA_TENANT_ID"),
-                "CLIENT_ID": self.get_env_var("LOKKA_APPLICATION_ID"),
-                "CLIENT_SECRET": self.get_env_var("LOKKA_APPLICATION_SECRET"),
-            },
-        )
-        self.tools.append(lokka_mcp)
+        self.tools.append(self.get_group_display_name)
 
     def get_env_var(self, var_name: str) -> str:
         """Retrieve environment variable value."""
