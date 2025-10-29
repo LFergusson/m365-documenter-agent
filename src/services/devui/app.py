@@ -17,7 +17,7 @@ def main():
 
     logger.info("Launching Dev UI server on port 7860...")
     try:
-        serve(entities=agents, port=7860, auto_open=True)
+        serve(entities=agents, port=7860, auto_open=True, tracing_enabled=True)
     except Exception as e:
         logger.error(f"Failed to start Dev UI server: {e}")
 
