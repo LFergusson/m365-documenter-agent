@@ -2,13 +2,11 @@
 
 import logging
 import os
-from typing import Annotated
-from pydantic import Field
-from agent_framework import MCPStdioTool, ai_function
+from azure.identity import DefaultAzureCredential
 from shared.helpers.agents.agent_client import BaseAgent
 from shared.models.chat_model import ChatModelConfig
 from shared.models.agent_instruction import AgentFewShotInstruction
-
+from shared.tools.graph import GraphTool
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -175,6 +173,13 @@ If there are any GUIDs or Ids present in the JSON, use your tools to look up the
 
     def __init__(self):
         logger.info("Initializing Graph Documenter Agent.")
+
+        self.graph_tool = GraphTool(
+            identity=DefaultAzureCredential(),
+            graph_endpoint="https://graph.microsoft.com/",
+            paging_enabled=True,
+        )
+
         super().__init__(
             instructions=self.few_shot_example,
             name="GraphDocumenterAgent",
@@ -190,7 +195,7 @@ If there are any GUIDs or Ids present in the JSON, use your tools to look up the
         logger.info("Setting up Graph Documenter Agent configuration.")
         # Additional setup can be done here if needed.
 
-        self.tools.append(get_group_display_name)
+        self.tools.append(self.graph_tool.get_resource)
 
     def get_env_var(self, var_name: str) -> str:
         """Retrieve environment variable value."""
@@ -198,21 +203,3 @@ If there are any GUIDs or Ids present in the JSON, use your tools to look up the
         if value is None:
             logger.warning(f"Environment variable {var_name} is not set.")
         return value or ""
-
-
-@ai_function(
-    name="get_group_display_name",
-    description="Retrieve the display name of an Entra group given its ID.",
-)
-def get_group_display_name(
-    group_id: Annotated[
-        str, Field(description="The unique identifier of the Entra group.")
-    ],
-) -> str:
-    """Function to get the display name of an Entra group by its ID using Lokka."""
-    # This is a placeholder implementation. The actual implementation would
-    # involve invoking the Lokka tool to query the Microsoft Graph API.
-    if group_id == "a68ee561-2427-4058-b307-7e2f7b8f6c07":
-        return f"The name of {group_id} is Break Glass Group - Test"
-
-    return "Error: Group Not Found"  # Replace with actual logic to get group name
