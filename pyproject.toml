@@ -1,21 +1,24 @@
-[project]
+[tool.poetry]
 name = "m365-documenter-agent"
 version = "0.1.0"
 description = "This is an agent that will document a Microsoft 365 Tenancy in As Built As Configured documentation"
 readme = "README.md"
-requires-python = ">=3.12,<3.14"
-dependencies = [
-    "fastapi>=0.119.0",
-    "uvicorn[standard]>=0.30.0",
-    "agent-framework(>=1.0.0b251007,<2.0.0)",
-    "pytest (>=8.4.2,<9.0.0)",
-    "msgraph-sdk (>=1.47.0,<2.0.0)"
+authors = ["Your Name <your.email@example.com>"]
+packages = [
+    {include = "services", from = "src"},
+    {include = "shared", from = "src"}
 ]
-[tool.setuptools]
-package-dir = {"" = "src"}
 
-[tool.setuptools.packages.find]
-where = ["src"]
+[tool.poetry.dependencies]
+python = ">=3.12,<3.14"
+fastapi = ">=0.119.0"
+uvicorn = {extras = ["standard"], version = ">=0.30.0"}
+agent-framework = ">=1.0.0b251007,<2.0.0"
+pytest = ">=8.4.2,<9.0.0"
+msgraph-sdk = ">=1.47.0,<2.0.0"
+msgraph-beta-sdk = ">=1.49.0,<2.0.0"
+
+[tool.poetry.group.dev.dependencies]
 
 # Pylance/Pyright configuration
 [tool.pyright]
@@ -25,5 +28,5 @@ pythonVersion = "3.12"
 typeCheckingMode = "basic"
 
 [build-system]
-requires = ["setuptools>=68.0.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
