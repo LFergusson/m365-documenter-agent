@@ -6,8 +6,8 @@ from agent_framework.azure import (
 from agent_framework import ChatAgent, AgentRunResponse, ToolProtocol
 from azure.identity import DefaultAzureCredential
 from abc import ABC, abstractmethod
+import shared.models.configuration as config
 
-from shared.models.chat_model import ChatModelConfig
 from shared.models.agent_instruction import AgentInstruction
 
 
@@ -19,7 +19,7 @@ class BaseAgent(ABC):
         self,
         instructions: AgentInstruction,
         name: str,
-        chat_completion_model: ChatModelConfig,
+        chat_completion_model: config.ModelConfiguration,
         use_content_safety: bool = True,
         tools: list = [],
     ):
@@ -29,10 +29,8 @@ class BaseAgent(ABC):
         self.use_content_safety = use_content_safety
         self.chat_completion_model = chat_completion_model
 
-        self.agent_client = AzureOpenAIChatClient(
-            endpoint=chat_completion_model.endpoint,
-            deployment_name=chat_completion_model.deployment_name,
-            credential=DefaultAzureCredential(),
+        self.agent_client = chat_completion_model.to_azure_oai_chat_client(
+            credential=DefaultAzureCredential()
         )
 
         self.tools = tools

@@ -1,10 +1,13 @@
-"""Main entry point for the Dev UI application. THis simply spawns the Dev UI server with the specified agents."""
+"""Main entry point for the Dev UI application. This simply spawns the Dev UI server with the specified agents."""
 
 import logging
+
+# This application is the entry point so we configure logging here.
+logging.basicConfig(level=logging.INFO)
+
 from agent_framework.devui import serve
 from shared.agents.graph_documenter import GraphDocumenterAgent
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 

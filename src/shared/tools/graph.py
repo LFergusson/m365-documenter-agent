@@ -31,7 +31,7 @@ class GraphTool:
         path: Annotated[
             str,
             Field(
-                description="The resource path to retrieve from Microsoft Graph API. For example, to get user details, use 'users/{user-id}'. To get group details, use 'groups/{group-id}'.",
+                description="The resource path to retrieve from Microsoft Graph API. For example, to get user details, use 'users/{user-id}'. To get group details, use 'groups/{group-id}'. To speed up the response, specify only the required fields using the $select query parameter. For example, 'users/{user-id}?$select=displayName,mail'.",
             ),
         ],
     ) -> str:

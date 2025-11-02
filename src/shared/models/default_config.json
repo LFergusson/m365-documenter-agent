@@ -1,0 +1,23 @@
+{
+    "model_deployments": {
+        "standard_chat_model": {
+            "name": "gpt-4o",
+            "endpoint": "https://aoai-browseragentwg3jl-dev.openai.azure.com/",
+            "deployment_name": "gpt-4o",
+            "type": "chat"
+        },
+        "simple_chat_model": {
+            "name": "gpt-5-mini",
+            "endpoint": "https://aoai-browseragentwg3jl-dev.openai.azure.com/",
+            "deployment_name": "gpt-5-mini",
+            "type": "chat"
+        },
+        "text_embedding_model": {
+            "name": "text-embedding-3-large",
+            "endpoint": "https://aoai-browseragentwg3jl-dev.openai.azure.com/",
+            "deployment_name": "text-embedding-3-large",
+            "type": "embedding"
+        }
+    }
+
+}

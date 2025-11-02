@@ -4,12 +4,12 @@ import logging
 import os
 from azure.identity import DefaultAzureCredential
 from shared.helpers.agents.agent_client import BaseAgent
-from shared.models.chat_model import ChatModelConfig
+
 from shared.models.agent_instruction import AgentFewShotInstruction
 from shared.tools.graph import GraphTool
+import shared.models.configuration as config
 
-# Set up logging
-logging.basicConfig(level=logging.INFO)
+# Get logger (logging should be configured by main application)
 logger = logging.getLogger(__name__)
 
 
@@ -171,6 +171,9 @@ If there are any GUIDs or Ids present in the JSON, use your tools to look up the
         examples=[example_1],
     )
 
+    config_factory = config.get_configuration_factory()
+    active_config = config_factory.create_configuration()
+
     def __init__(self):
         logger.info("Initializing Graph Documenter Agent.")
 
@@ -183,10 +186,7 @@ If there are any GUIDs or Ids present in the JSON, use your tools to look up the
         super().__init__(
             instructions=self.few_shot_example,
             name="GraphDocumenterAgent",
-            chat_completion_model=ChatModelConfig(
-                endpoint="https://aoai-browseragentwg3jl-dev.openai.azure.com/",
-                deployment_name="gpt-4o",
-            ),
+            chat_completion_model=self.active_config.get_standard_chat_model(),
             use_content_safety=False,
         )
 
