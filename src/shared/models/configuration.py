@@ -24,7 +24,7 @@ class ModelTypes(Enum):
 
 @dataclass
 class ModelConfiguration:
-    """Model configuration settings."""
+    """AI Model configuration settings."""
 
     name: str
     type: ModelTypes
@@ -189,12 +189,20 @@ class ConfigurationSingleton:
     ) -> Configuration:
         """Get or create a singleton instance of the specified configuration class."""
         if config_class not in cls._instances:
+            logger.info("No existing instance of %s found.", config_class.__name__)
             with cls._lock:
                 # Double-check locking pattern
                 if config_class not in cls._instances:
+                    logger.info("Creating new instance of %s", config_class.__name__)
                     instance = config_class(*args, **kwargs)
                     instance.initialize()
                     cls._instances[config_class] = instance
+                else:
+                    logger.info(
+                        "Returning existing instance of %s", config_class.__name__
+                    )
+        else:
+            logger.info("Returning existing instance of %s", config_class.__name__)
         return cls._instances[config_class]
 
     @classmethod
