@@ -171,8 +171,7 @@ If there are any GUIDs or Ids present in the JSON, use your tools to look up the
         examples=[example_1],
     )
 
-    config_factory = config.get_configuration_factory()
-    active_config = config_factory.create_configuration()
+    active_config = config.ConfigurationFactory.create_configuration()
 
     def __init__(self):
         logger.info("Initializing Graph Documenter Agent.")
